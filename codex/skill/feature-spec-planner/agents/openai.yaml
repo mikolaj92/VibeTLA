@@ -1,0 +1,3 @@
+interface:
+  display_name: "Feature Spec Planner"
+  short_description: "Plan features before coding with formal specs and TLA+ checks."
