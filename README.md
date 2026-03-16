@@ -51,6 +51,22 @@ This repo uses `mise` to pin Python, Java, and `uv`, and uses `uv` to run the CL
 
 ## Skill Installation
 
+Use the curl installer if you want the shortest path for an agent or a fresh machine:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/mikolaj92/VibeTLA/main/install.sh | bash
+```
+
+This installer:
+
+- clones or updates VibeTLA in `~/.local/share/vibetla`
+- installs the OpenCode skill link
+- installs the Codex skill link
+
+It does not install into `/tmp` or `/private/...`.
+
+If you already have the repo locally, you can still run the lower-level scripts directly:
+
 ```bash
 ./scripts/install_opencode_skill.sh
 ./scripts/install_codex_skill.sh
@@ -61,7 +77,7 @@ These scripts install the skill globally for the current user by creating symlin
 - `~/.config/opencode/skill/feature-spec-planner`
 - `~/.config/codex/skill/feature-spec-planner`
 
-The skill definition itself stays in this repository and the global config points to it.
+The skill definition stays in a stable local repository checkout and the global config points to it.
 
 ## Project Bootstrap
 
@@ -91,7 +107,7 @@ VibeTLA uses a two-part installation model.
 
 ### 1. Global skill installation
 
-Install the skill once per machine through the scripts in `scripts/`.
+Install the skill once per machine through `install.sh` or the scripts in `scripts/`.
 
 This is the part that teaches OpenCode or Codex how to run the planner workflow.
 
@@ -120,10 +136,11 @@ Temporary system paths are acceptable only as runtime scratch space for tools li
 
 If you are installing VibeTLA for a user:
 
-1. Keep the skill source in this repo.
-2. Link the skill into the user's config directory.
-3. Use `./scripts/bootstrap_project.sh` in the target project repo when you need local planning directories.
-4. Keep feature inputs and generated spec packs inside the target project repo.
-5. Do not treat temp directories as durable storage.
+1. Prefer the one-liner installer: `curl -fsSL https://raw.githubusercontent.com/mikolaj92/VibeTLA/main/install.sh | bash`.
+2. Keep the skill source in a stable local checkout such as `~/.local/share/vibetla`.
+3. Link the skill into the user's config directory.
+4. Use `./scripts/bootstrap_project.sh` in the target project repo when you need local planning directories.
+5. Keep feature inputs and generated spec packs inside the target project repo.
+6. Do not treat temp directories as durable storage.
 
 In short: skill globally, artifacts locally, temp only at runtime.
