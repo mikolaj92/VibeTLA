@@ -55,3 +55,75 @@ This repo uses `mise` to pin Python, Java, and `uv`, and uses `uv` to run the CL
 ./scripts/install_opencode_skill.sh
 ./scripts/install_codex_skill.sh
 ```
+
+These scripts install the skill globally for the current user by creating symlinks in:
+
+- `~/.config/opencode/skill/feature-spec-planner`
+- `~/.config/codex/skill/feature-spec-planner`
+
+The skill definition itself stays in this repository and the global config points to it.
+
+## Project Bootstrap
+
+If you want to prepare a target repository for VibeTLA artifacts, use the in-repo bootstrap script:
+
+```bash
+./scripts/bootstrap_project.sh /path/to/project
+```
+
+If you run it inside an existing project repository, you can also call it without arguments:
+
+```bash
+./scripts/bootstrap_project.sh
+```
+
+The bootstrap script only prepares project-local state:
+
+- `planning/tasks/`
+- `specs/`
+- `.gitignore` entry for `states/`
+
+It does not install the skill globally. Use the install scripts for that.
+
+## Installation Model
+
+VibeTLA uses a two-part installation model.
+
+### 1. Global skill installation
+
+Install the skill once per machine through the scripts in `scripts/`.
+
+This is the part that teaches OpenCode or Codex how to run the planner workflow.
+
+### 2. Project-local artifacts
+
+The actual planning outputs belong inside the target project repository, for example:
+
+- `planning/tasks/`
+- `specs/`
+
+Those files are project state, not global user configuration.
+
+## Important Path Rules
+
+Do not install the skill into temporary directories such as `/tmp` or macOS paths under `/private/var/folders/...`.
+
+Use stable locations only:
+
+- this repository for the source of truth
+- `~/.config/opencode/skill/...` or `~/.config/codex/skill/...` for global skill links
+- the target project repository for generated planning artifacts
+
+Temporary system paths are acceptable only as runtime scratch space for tools like TLC. They are not valid installation targets.
+
+## For Future Agents
+
+If you are installing VibeTLA for a user:
+
+1. Keep the skill source in this repo.
+2. Link the skill into the user's config directory.
+3. Use `./scripts/bootstrap_project.sh` in the target project repo when you need local planning directories.
+4. Keep feature inputs and generated spec packs inside the target project repo.
+5. Do not treat temp directories as durable storage.
+
+In short: skill globally, artifacts locally, temp only at runtime.
