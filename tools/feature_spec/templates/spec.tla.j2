@@ -1,0 +1,30 @@
+----------------------------- MODULE spec -----------------------------
+EXTENDS TLC
+
+\* Summary: {{ model.summary }}
+{% for invariant in model.invariants %}\* Invariant note: {{ invariant }}
+{% endfor %}{% for assumption in model.assumptions %}\* Assumption: {{ assumption }}
+{% endfor %}
+CONSTANTS States
+
+VARIABLE state
+
+Init ==
+  state = "{{ model.states[0] }}"
+
+{% for transition in model.transitions %}{{ transition.name | replace('-', '_') | title | replace('_', '') }} ==
+  /\ state \in { {% for from_state in transition.from_states %}"{{ from_state }}"{% if not loop.last %}, {% endif %}{% endfor %} }
+  /\ state' = "{{ transition.to_state }}"
+
+{% endfor %}Stutter ==
+  /\ state' = state
+
+Next ==
+{% if model.transitions %}{% for transition in model.transitions %}  {{ transition.name | replace('-', '_') | title | replace('_', '') }} \/
+{% endfor %}{% endif %}  Stutter
+
+TypeInvariant == state \in States
+
+Spec == Init /\ [][Next]_state
+
+=============================================================================

@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/feature_spec.schema.json",
+  "title": "FeatureSpec",
+  "type": "object",
+  "required": [
+    "task_id",
+    "summary",
+    "entities",
+    "states",
+    "transitions",
+    "invariants",
+    "forbidden_states",
+    "assumptions",
+    "non_goals"
+  ],
+  "properties": {
+    "task_id": {"type": "string"},
+    "summary": {"type": "string"},
+    "entities": {
+      "type": "array",
+      "items": {"type": "string"}
+    },
+    "states": {
+      "type": "array",
+      "items": {"type": "string"}
+    },
+    "transitions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "from", "to"],
+        "properties": {
+          "name": {"type": "string"},
+          "from": {
+            "type": "array",
+            "items": {"type": "string"}
+          },
+          "to": {"type": "string"}
+        }
+      }
+    },
+    "invariants": {
+      "type": "array",
+      "items": {"type": "string"}
+    },
+    "forbidden_states": {
+      "type": "array",
+      "items": {"type": "string"}
+    },
+    "assumptions": {
+      "type": "array",
+      "items": {"type": "string"}
+    },
+    "non_goals": {
+      "type": "array",
+      "items": {"type": "string"}
+    }
+  }
+}

@@ -1,0 +1,57 @@
+# Summary
+
+{{ model.summary }}
+
+## Entities
+
+{% for entity in model.entities %}
+- {{ entity }}
+{% else %}
+- none specified
+{% endfor %}
+
+## States
+
+{% for state in model.states %}
+- {{ state }}
+{% endfor %}
+
+## Transitions
+
+{% for transition in model.transitions %}
+- {{ transition.name }}: {{ transition.from_states | join(', ') }} -> {{ transition.to_state }}
+{% else %}
+- no explicit transitions were provided
+{% endfor %}
+
+## Invariants
+
+{% for invariant in model.invariants %}
+- {{ invariant }}
+{% else %}
+- none specified
+{% endfor %}
+
+## Forbidden states
+
+{% for forbidden_state in model.forbidden_states %}
+- {{ forbidden_state }}
+{% else %}
+- none specified
+{% endfor %}
+
+## Assumptions
+
+{% for assumption in model.assumptions %}
+- {{ assumption }}
+{% else %}
+- none specified
+{% endfor %}
+
+## Non-goals
+
+{% for non_goal in model.non_goals %}
+- {{ non_goal }}
+{% else %}
+- none specified
+{% endfor %}

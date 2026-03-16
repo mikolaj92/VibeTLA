@@ -1,0 +1,35 @@
+# Required behavior
+
+- Implement the states and transitions defined in `plan.md`.
+- Preserve the checked transition graph from `spec.tla`.
+
+## Constraints
+
+{% for invariant in model.invariants %}
+- {{ invariant }}
+{% else %}
+- keep the runtime behavior aligned with the spec pack
+{% endfor %}
+
+## Persistence expectations
+
+{% for assumption in model.assumptions %}
+- {{ assumption }}
+{% else %}
+- persist enough state to enforce the transition model
+{% endfor %}
+
+## Do not do
+
+{% for non_goal in model.non_goals %}
+- {{ non_goal }}
+{% else %}
+- do not add extra product scope outside the pack
+{% endfor %}
+
+## Suggested implementation order
+
+1. Add the state model.
+2. Implement the named transitions.
+3. Enforce invariant-related constraints.
+4. Add tests from `tests.md`.

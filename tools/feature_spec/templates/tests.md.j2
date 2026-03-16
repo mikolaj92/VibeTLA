@@ -1,0 +1,41 @@
+# Happy paths
+
+{% for transition in model.transitions %}
+- {{ transition.name }} moves {{ transition.from_states | join(', ') }} to {{ transition.to_state }}
+{% else %}
+- cover the baseline state initialization path
+{% endfor %}
+
+## Invalid transitions
+
+{% for state in model.states %}
+- reject transitions that are not enabled from `{{ state }}`
+{% endfor %}
+
+## Invariant checks
+
+{% for invariant in model.invariants %}
+- {{ invariant }}
+{% else %}
+- assert runtime state always remains within the declared states set
+{% endfor %}
+
+## Failure cases
+
+{% for forbidden_state in model.forbidden_states %}
+- ensure the system never reaches: {{ forbidden_state }}
+{% else %}
+- verify invalid or conflicting state updates are rejected
+{% endfor %}
+
+## Retry/idempotency
+
+{% for assumption in model.assumptions %}
+- verify: {{ assumption }}
+{% else %}
+- verify repeated calls do not violate the state machine
+{% endfor %}
+
+## Property-based ideas
+
+- generate transition sequences and assert all reachable states stay within the declared graph

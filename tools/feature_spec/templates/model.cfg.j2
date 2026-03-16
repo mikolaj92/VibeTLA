@@ -1,0 +1,5 @@
+SPECIFICATION Spec
+CONSTANTS
+  States = { {% for state in model.states %}"{{ state }}"{% if not loop.last %}, {% endif %}{% endfor %} }
+INVARIANTS
+  TypeInvariant
