@@ -1,0 +1,79 @@
+{
+  "task_id": "example-session-refresh",
+  "summary": "Refresh session token with bounded retry and invalidation rules.",
+  "entities": [
+    "session",
+    "refresh-token",
+    "access-token"
+  ],
+  "states": [
+    "active",
+    "refreshing",
+    "refreshed",
+    "expired",
+    "invalid"
+  ],
+  "transitions": [
+    {
+      "name": "begin-refresh",
+      "from": [
+        "active"
+      ],
+      "to": "refreshing"
+    },
+    {
+      "name": "refresh-success",
+      "from": [
+        "refreshing"
+      ],
+      "to": "refreshed"
+    },
+    {
+      "name": "refresh-failure",
+      "from": [
+        "refreshing"
+      ],
+      "to": "expired"
+    },
+    {
+      "name": "invalidate-session",
+      "from": [
+        "active",
+        "refreshed",
+        "expired"
+      ],
+      "to": "invalid"
+    }
+  ],
+  "invariants": [
+    "invalid sessions cannot become active again",
+    "a session cannot be both expired and refreshed"
+  ],
+  "forbidden_states": [
+    "session is both active and expired"
+  ],
+  "assumptions": [
+    "only one refresh attempt is active per session",
+    "retry is bounded by the caller before entering invalid"
+  ],
+  "non_goals": [
+    "UI for login prompts"
+  ],
+  "paths": {
+    "plan": "specs/example-session-refresh/plan.md",
+    "spec": "specs/example-session-refresh/spec.tla",
+    "model": "specs/example-session-refresh/model.cfg",
+    "impl": "specs/example-session-refresh/impl.md",
+    "tests": "specs/example-session-refresh/tests.md",
+    "bundle": "specs/example-session-refresh/bundle.json"
+  },
+  "implementation_warnings": [
+    "Do not introduce fallback behavior that violates the checked model.",
+    "Keep runtime transitions aligned with the named states and transitions in the pack."
+  ],
+  "testing_obligations": [
+    "Cover happy paths for each named transition.",
+    "Verify illegal transitions are rejected.",
+    "Assert invariants are preserved across retries and failures."
+  ]
+}

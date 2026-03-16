@@ -1,0 +1,30 @@
+{
+  "task_id": "smoke-session-refresh",
+  "summary": "Add session refresh with bounded retry",
+  "entities": [],
+  "states": [
+    "draft"
+  ],
+  "transitions": [],
+  "invariants": [],
+  "forbidden_states": [],
+  "assumptions": [],
+  "non_goals": [],
+  "paths": {
+    "plan": "specs/smoke-session-refresh/plan.md",
+    "spec": "specs/smoke-session-refresh/spec.tla",
+    "model": "specs/smoke-session-refresh/model.cfg",
+    "impl": "specs/smoke-session-refresh/impl.md",
+    "tests": "specs/smoke-session-refresh/tests.md",
+    "bundle": "specs/smoke-session-refresh/bundle.json"
+  },
+  "implementation_warnings": [
+    "Do not introduce fallback behavior that violates the checked model.",
+    "Keep runtime transitions aligned with the named states and transitions in the pack."
+  ],
+  "testing_obligations": [
+    "Cover happy paths for each named transition.",
+    "Verify illegal transitions are rejected.",
+    "Assert invariants are preserved across retries and failures."
+  ]
+}
