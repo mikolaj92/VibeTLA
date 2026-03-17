@@ -66,6 +66,26 @@ def normalize_feature(parsed: ParsedTask, task_id: str | None = None) -> Feature
             transitions.append(transition)
 
     states: list[str] = [slugify(state) for state in parsed.sections.get("states", []) if state.strip()]
+    
+    if states:
+        defined_states = set(states)
+        undefined_states: set[str] = set()
+        for transition in transitions:
+            for from_state in transition.from_states:
+                if from_state not in defined_states:
+                    undefined_states.add(from_state)
+            if transition.to_state not in defined_states:
+                undefined_states.add(transition.to_state)
+        
+        if undefined_states:
+            import warnings
+            warnings.warn(
+                f"Transition states not defined in States section: {sorted(undefined_states)}. "
+                f"Defined states: {sorted(defined_states)}. "
+                f"This will cause the TLA+ spec to have mismatched states. "
+                f"Add these states to the ## States section or use the same names in both places.",
+                UserWarning
+            )
     if not states:
         inferred_states: list[str] = []
         for transition in transitions:
