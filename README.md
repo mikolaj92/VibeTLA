@@ -75,7 +75,9 @@ If you already have the repo locally, you can still run the lower-level scripts 
 These scripts install the skill globally for the current user by creating symlinks in:
 
 - `~/.config/opencode/skill/feature-spec-planner`
-- `~/.config/codex/skill/feature-spec-planner`
+- `~/.codex/skills/feature-spec-planner`
+
+You can override the Codex skill root with `CODEX_SKILL_DIR`.
 
 The skill definition stays in a stable local repository checkout and the global config points to it.
 
@@ -127,7 +129,7 @@ Do not install the skill into temporary directories such as `/tmp` or macOS path
 Use stable locations only:
 
 - this repository for the source of truth
-- `~/.config/opencode/skill/...` or `~/.config/codex/skill/...` for global skill links
+- `~/.config/opencode/skill/...` or `~/.codex/skills/...` for global skill links
 - the target project repository for generated planning artifacts
 
 Temporary system paths are acceptable only as runtime scratch space for tools like TLC. They are not valid installation targets.
