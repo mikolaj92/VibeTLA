@@ -15,8 +15,14 @@ dependencies = [
   "typer>=0.12",
 ]
 
+[project.optional-dependencies]
+dev = ["pytest>=8.0"]
+
 [project.scripts]
 feature-spec = "feature_spec.cli:app"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
 
 [tool.hatch.build.targets.wheel]
 packages = ["tools/feature_spec"]
