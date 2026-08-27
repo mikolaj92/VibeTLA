@@ -3,7 +3,7 @@ set -euo pipefail
 
 repo_root="$(cd "$(dirname "$0")/.." && pwd)"
 source_dir="$repo_root/.opencode/skills/feature-spec-planner"
-target_dir="$HOME/.config/opencode/skill/feature-spec-planner"
+target_dir="$HOME/.config/opencode/skills/feature-spec-planner"
 
 mkdir -p "$(dirname "$target_dir")"
 rm -rf "$target_dir"
