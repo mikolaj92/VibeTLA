@@ -46,12 +46,19 @@
     }
   ],
   "invariants": [
-    "invalid sessions cannot become active again",
-    "a session cannot be both expired and refreshed"
+    "transition != invalid -> active"
   ],
-  "forbidden_states": [
-    "session is both active and expired"
-  ],
+  "forbidden_states": [],
+  "formal_invariants": {
+    "states": [],
+    "transitions": [
+      {
+        "name": "TransitionInvariant1",
+        "from_state": "invalid",
+        "to_state": "active"
+      }
+    ]
+  },
   "assumptions": [
     "only one refresh attempt is active per session",
     "retry is bounded by the caller before entering invalid"

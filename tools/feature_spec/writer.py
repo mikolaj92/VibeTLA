@@ -8,7 +8,6 @@ from jinja2 import Environment, FileSystemLoader
 from .bundle import write_bundle
 from .normalize import FeatureModel
 
-
 TEMPLATE_ROOT = Path(__file__).parent / "templates"
 
 

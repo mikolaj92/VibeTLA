@@ -5,8 +5,7 @@
 
 ## Constraints
 
-- invalid sessions cannot become active again
-- a session cannot be both expired and refreshed
+- transition != invalid -> active
 
 ## Persistence expectations
 

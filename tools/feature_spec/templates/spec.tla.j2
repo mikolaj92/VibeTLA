@@ -2,29 +2,35 @@
 EXTENDS TLC
 
 \* Summary: {{ model.summary }}
-{% for invariant in model.invariants %}\* Invariant note: {{ invariant }}
-{% endfor %}{% for assumption in model.assumptions %}\* Assumption: {{ assumption }}
+{% for assumption in model.assumptions %}\* Assumption: {{ assumption }}
 {% endfor %}
 CONSTANTS States
 
-VARIABLE state
+VARIABLES state, previous_state
 
 Init ==
-  state = "{{ model.states[0] }}"
+  /\ state = "{{ model.states[0] }}"
+  /\ previous_state = state
 
 {% for transition in model.transitions %}{{ transition.name | replace('-', '_') | title | replace('_', '') }} ==
   /\ state \in { {% for from_state in transition.from_states %}"{{ from_state }}"{% if not loop.last %}, {% endif %}{% endfor %} }
+  /\ previous_state' = state
   /\ state' = "{{ transition.to_state }}"
 
 {% endfor %}Stutter ==
   /\ state' = state
+  /\ previous_state' = previous_state
 
 Next ==
 {% if model.transitions %}{% for transition in model.transitions %}  {{ transition.name | replace('-', '_') | title | replace('_', '') }} \/
 {% endfor %}{% endif %}  Stutter
 
-TypeInvariant == state \in States
-
-Spec == Init /\ [][Next]_state
+TypeInvariant == state \in States /\ previous_state \in States
+{% for invariant in model.state_invariants %}
+{{ invariant.name }} == state # "{{ invariant.forbidden_state }}"
+{% endfor %}{% for invariant in model.transition_invariants %}
+{{ invariant.name }} == ~(previous_state = "{{ invariant.from_state }}" /\ state = "{{ invariant.to_state }}")
+{% endfor %}
+Spec == Init /\ [][Next]_<<state, previous_state>>
 
 =============================================================================

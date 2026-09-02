@@ -25,12 +25,11 @@ Refresh session token with bounded retry and invalidation rules.
 
 ## Invariants
 
-- invalid sessions cannot become active again
-- a session cannot be both expired and refreshed
+- transition != invalid -> active
 
 ## Forbidden states
 
-- session is both active and expired
+
 
 ## Assumptions
 

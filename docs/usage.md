@@ -7,42 +7,25 @@ mise install
 uv sync
 ```
 
-## Create a planning pack from a task file
+## Create a new planning pack
+
+Use a structured task with non-empty `## States` and `## Transitions`. The output directory must not already contain a pack.
 
 ```bash
-uv run feature-spec plan planning/tasks/example-session-refresh.md
+uv run feature-spec plan /path/to/target/planning/tasks/new-feature.md --output-root /path/to/target/specs
 ```
 
-## Create a planning pack from raw text
+`--from-text` accepts the same structured Markdown and fails closed on loose prose:
 
 ```bash
-uv run feature-spec plan --from-text "Add session refresh with bounded retry"
+uv run feature-spec plan --from-text $'## States\n- idle\n- ready\n## Transitions\n- activate: idle -> ready' --task-id new-feature --output-root /path/to/target/specs
 ```
 
-## Check a generated spec
+## Check and bundle the committed example
 
 ```bash
 uv run feature-spec check specs/example-session-refresh
-```
-
-`check` requires `java` and `tla2tools.jar`. The runner looks for the jar in:
-
-1. `TLATOOLS_JAR`
-2. `TLA2TOOLS_JAR`
-3. `~/.local/share/tla2tools.jar`
-4. `~/tla2tools.jar`
-5. `/opt/tla2tools.jar`
-6. `/usr/local/share/tla2tools.jar`
-7. `./tla2tools.jar`
-
-## Rebuild the machine-readable bundle
-
-```bash
 uv run feature-spec bundle specs/example-session-refresh
 ```
 
-## Check the local environment
-
-```bash
-uv run feature-spec doctor
-```
+`check` requires `java` and `tla2tools.jar`. Run `uv run feature-spec doctor` for the exact environment report. The runner checks `TLATOOLS_JAR`, `TLA2TOOLS_JAR`, standard user/system locations, and `./tla2tools.jar`.
