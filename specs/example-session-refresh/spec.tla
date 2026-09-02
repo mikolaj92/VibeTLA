@@ -2,35 +2,39 @@
 EXTENDS TLC
 
 \* Summary: Refresh session token with bounded retry and invalidation rules.
-\* Invariant note: invalid sessions cannot become active again
-\* Invariant note: a session cannot be both expired and refreshed
 \* Assumption: only one refresh attempt is active per session
 \* Assumption: retry is bounded by the caller before entering invalid
 CONSTANTS States
 
-VARIABLE state
+VARIABLES state, previous_state
 
 Init ==
-  state = "active"
+  /\ state = "active"
+  /\ previous_state = state
 
 Beginrefresh ==
   /\ state \in { "active" }
+  /\ previous_state' = state
   /\ state' = "refreshing"
 
 Refreshsuccess ==
   /\ state \in { "refreshing" }
+  /\ previous_state' = state
   /\ state' = "refreshed"
 
 Refreshfailure ==
   /\ state \in { "refreshing" }
+  /\ previous_state' = state
   /\ state' = "expired"
 
 Invalidatesession ==
   /\ state \in { "active", "refreshed", "expired" }
+  /\ previous_state' = state
   /\ state' = "invalid"
 
 Stutter ==
   /\ state' = state
+  /\ previous_state' = previous_state
 
 Next ==
   Beginrefresh \/
@@ -38,8 +42,9 @@ Next ==
   Refreshfailure \/
   Invalidatesession \/
   Stutter
-TypeInvariant == state \in States
 
-Spec == Init /\ [][Next]_state
+TypeInvariant == state \in States /\ previous_state \in States
+TransitionInvariant1 == ~(previous_state = "invalid" /\ state = "active")
+Spec == Init /\ [][Next]_<<state, previous_state>>
 
 =============================================================================

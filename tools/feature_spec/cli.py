@@ -9,7 +9,6 @@ from .bundle import load_model_from_plan, write_bundle
 from .planner import plan_feature
 from .tla_runner import doctor_report, format_doctor_report, parse_tlc_output, run_tlc
 
-
 app = typer.Typer(help="Plan features before coding with formal specs and TLA+ checks.")
 
 
@@ -18,6 +17,7 @@ def plan(
     path: Annotated[str, typer.Argument(help="Path to a task markdown file.")] = "",
     from_text: Annotated[str, typer.Option("--from-text", help="Plan directly from raw text.")] = "",
     task_id: Annotated[str, typer.Option("--task-id", help="Override the derived task id.")] = "",
+    output_root: Annotated[str, typer.Option("--output-root", help="Target repository specs directory.")] = "specs",
 ) -> None:
     """Create a spec pack from a task file or raw text."""
 
@@ -27,6 +27,7 @@ def plan(
             path=resolved_path,
             from_text=from_text or None,
             task_id=task_id or None,
+            output_root=Path(output_root),
         )
     except (FileNotFoundError, FileExistsError, ValueError) as error:
         raise typer.Exit(code=_fail(str(error))) from error
@@ -71,8 +72,11 @@ def bundle(spec_dir: str) -> None:
     if missing:
         raise typer.Exit(code=_fail(f"Missing required artifact(s): {', '.join(missing)}"))
 
-    model = load_model_from_plan(resolved_dir)
-    bundle_path = write_bundle(resolved_dir, model)
+    try:
+        model = load_model_from_plan(resolved_dir)
+        bundle_path = write_bundle(resolved_dir, model)
+    except ValueError as error:
+        raise typer.Exit(code=_fail(str(error))) from error
     typer.echo(f"wrote: {bundle_path}")
 
 

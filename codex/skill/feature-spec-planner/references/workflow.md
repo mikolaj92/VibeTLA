@@ -1,12 +1,9 @@
 # workflow
 
-1. Read the feature description.
-2. Identify entities, states, transitions, invariants, assumptions, and non-goals.
-3. Produce `plan.md`.
-4. Produce `spec.tla` and `model.cfg`.
-5. Validate the model.
-6. Produce `impl.md`, `tests.md`, and `bundle.json`.
-7. Hand off the checked bundle to the implementation agent.
+1. Write a structured task file in the target repository.
+2. From the stable VibeTLA checkout, run `uv run feature-spec plan <target-task-path> --output-root <target-repo>/specs`.
+3. Run `uv run feature-spec check <target-spec-directory>`.
+4. Run `uv run feature-spec bundle <target-spec-directory>`.
+5. Hand off the checked bundle to the implementation agent.
 
-Never skip the modeling step for stateful or non-trivial work.
-Never paper over ambiguity with fallback behavior.
+Never write `spec.tla` manually. If the CLI or TLC is unavailable, run `uv run feature-spec doctor` and stop on failure. Never paper over ambiguity with fallback behavior.

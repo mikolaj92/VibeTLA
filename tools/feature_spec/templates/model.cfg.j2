@@ -3,3 +3,6 @@ CONSTANTS
   States = { {% for state in model.states %}"{{ state }}"{% if not loop.last %}, {% endif %}{% endfor %} }
 INVARIANTS
   TypeInvariant
+{% for invariant in model.state_invariants %}  {{ invariant.name }}
+{% endfor %}{% for invariant in model.transition_invariants %}  {{ invariant.name }}
+{% endfor %}

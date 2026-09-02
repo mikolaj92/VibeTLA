@@ -23,6 +23,10 @@ def build_bundle_payload(model: FeatureModel, spec_dir: Path) -> dict[str, objec
         ],
         "invariants": model.invariants,
         "forbidden_states": model.forbidden_states,
+        "formal_invariants": {
+            "states": [item.model_dump() for item in model.state_invariants],
+            "transitions": [item.model_dump() for item in model.transition_invariants],
+        },
         "assumptions": model.assumptions,
         "non_goals": model.non_goals,
         "paths": {

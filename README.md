@@ -28,11 +28,11 @@ Use VibeTLA before coding stateful or risky work. The planner layer writes the m
 
 ```bash
 mise install
-uv run feature-spec plan planning/tasks/example-session-refresh.md
 uv run feature-spec check specs/example-session-refresh
 uv run feature-spec bundle specs/example-session-refresh
 uv run feature-spec doctor
-uv run feature-spec plan --from-text "Add session refresh with bounded retry"
+uv run feature-spec plan /path/to/target/planning/tasks/new-feature.md --output-root /path/to/target/specs
+uv run feature-spec plan --from-text $'## States\n- idle\n- ready\n## Transitions\n- activate: idle -> ready' --task-id new-feature --output-root /path/to/target/specs
 ```
 
 ## Folder Structure
@@ -77,7 +77,7 @@ These scripts install the skill globally for the current user by creating symlin
 - `~/.config/opencode/skills/feature-spec-planner`
 - `~/.codex/skills/feature-spec-planner`
 
-You can override the Codex skill root with `CODEX_SKILL_DIR`.
+You can override the Codex skill root with `CODEX_SKILL_DIR` and the OpenCode skill root with `OPENCODE_SKILL_DIR`.
 
 The skill definition stays in a stable local repository checkout and the global config points to it.
 

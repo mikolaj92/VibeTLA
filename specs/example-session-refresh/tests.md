@@ -15,12 +15,11 @@
 
 ## Invariant checks
 
-- invalid sessions cannot become active again
-- a session cannot be both expired and refreshed
+- transition != invalid -> active
 
 ## Failure cases
 
-- ensure the system never reaches: session is both active and expired
+- verify invalid or conflicting state updates are rejected
 
 ## Retry/idempotency
 
